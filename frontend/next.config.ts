@@ -10,21 +10,30 @@ const withPWANext = withPWA({
   workboxOptions: {
     runtimeCaching: [
       {
-        urlPattern: ({ url }) => url.origin.includes("localhost"),
+        // Cache API calls to your Render backend
+        urlPattern: ({ url }) =>
+          url.origin === "https://drishti-upi-service.onrender.com",
         handler: "NetworkFirst",
         options: {
           cacheName: "api-cache",
           networkTimeoutSeconds: 5,
-          expiration: { maxEntries: 200, maxAgeSeconds: 24 * 60 * 60 },
+          expiration: {
+            maxEntries: 200,
+            maxAgeSeconds: 24 * 60 * 60, // 1 day
+          },
           cacheableResponse: { statuses: [0, 200] },
         },
       },
       {
+        // Cache all images
         urlPattern: ({ request }) => request.destination === "image",
         handler: "StaleWhileRevalidate",
         options: {
           cacheName: "image-cache",
-          expiration: { maxEntries: 200, maxAgeSeconds: 7 * 24 * 60 * 60 },
+          expiration: {
+            maxEntries: 200,
+            maxAgeSeconds: 7 * 24 * 60 * 60, // 1 week
+          },
         },
       },
     ],
@@ -35,14 +44,13 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "*",
+        protocol: "https",
+        hostname: "drishti-upi-service.onrender.com",
         pathname: "/**",
       },
       {
         protocol: "https",
-        hostname: "*",
+        hostname: "**", // Allow any CDN-hosted images
         pathname: "/**",
       },
     ],
