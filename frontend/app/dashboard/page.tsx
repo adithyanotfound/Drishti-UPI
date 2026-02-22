@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
 import { useUserStore } from "@/store/user";
 import Link from "next/link";
 import { BottomNav } from "@/components/BottomNav";
@@ -27,7 +26,7 @@ export default function DashboardPage() {
         if (!mobile) return;
         const s = await getAuthStatus(mobile);
         setAuth({ upiId: s.upiId || null, qrCodeUrl: s.qrCodeUrl || null });
-      } catch {}
+      } catch { }
     }
     refresh();
   }, [mobile, setAuth]);
@@ -83,16 +82,16 @@ export default function DashboardPage() {
         </Card>
 
         <div className="grid grid-cols-2 gap-3">
-          <Link href="/scan">
-            <Button className="w-full h-12 rounded-xl bg-black text-white hover:bg-gray-800">
+          <Button asChild className="w-full h-12 rounded-xl bg-black text-white hover:bg-gray-800">
+            <Link href="/scan">
               Scan QR
-            </Button>
-          </Link>
-          <Link href="/transactions">
-            <Button className="w-full h-12 rounded-xl bg-black text-white hover:bg-gray-800">
+            </Link>
+          </Button>
+          <Button asChild className="w-full h-12 rounded-xl bg-black text-white hover:bg-gray-800">
+            <Link href="/transactions">
               Transactions
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </div>
 
